@@ -1,24 +1,5 @@
 <?php
-define('DB_HOST', '127.0.0.1');
-define('DB_NAME', 'memopad');
-define('DB_USER', 'root');
-define('DB_PASSWORD', '');
-define('DB_PORT', '43306');
-
-// 文字化け対策
-$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET 'utf8'");
-
-// PHPのエラーを表示するように設定
-error_reporting(E_ALL & ~E_NOTICE);
-
-// データベースの接続
-try {
-  $dbh = new PDO('mysql:host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME, DB_USER, DB_PASSWORD, $options);
-  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-  echo $e->getMessage();
-  exit;
-}
+require('dateabase.php');
 
 /**
  * メモを操作するクラス
@@ -190,8 +171,8 @@ if (isset($_POST["junction"])) {
     case "削除":
       $memo = Memo::findById($_POST['id']);
       $memo->delete();
-      // メモ作成後はメモはリダイレクトする
-      header('Location: /memopad/create.php');
+      // メモ削除後はメモはリダイレクトする
+      header('Location: /tiny_memo/');
       exit;
   }
 } elseif (!empty($_GET['linkId'])) {
@@ -219,15 +200,15 @@ if ($memo) {
 </head>
 
 <body>
-  <form method='post' action='/memopad/create.php'>
+  <form method='post' action='/tiny_memo/'>
     <div class="sidebar">
       <p>メモ一覧<p>
       <br />
-      <a href='/memopad/create.php'><input name='back' type='submit' value='新規作成'></a>
+      <a href='/tiny_memo/'><input name='back' type='submit' value='新規作成'></a>
 
       <?PHP foreach (Memo::all() as $row) : ?>
         <p class='dot'>id:</p>
-        <a href='/memopad/create.php?linkId=<?PHP print $row["id"] ?>'><input id='linkId' class='linkId' type='button' name='linkId' value='<?PHP print $row["id"] ?>'></a>
+        <a href='/tiny_memo/?linkId=<?PHP print $row["id"] ?>'><input id='linkId' class='linkId' type='button' name='linkId' value='<?PHP print $row["id"] ?>'></a>
         <br>
         <p><?PHP print $row['title'] ?></p>
         <p class="overflow-ellipsis"><?PHP print $row['message'] ?></p>
