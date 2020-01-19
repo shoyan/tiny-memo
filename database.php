@@ -2,8 +2,8 @@
 define('DB_HOST', '127.0.0.1');
 define('DB_NAME', 'tiny_memo');
 define('DB_USER', 'root');
-define('DB_PASSWORD', '');
-define('DB_PORT', '3306');
+define('DB_PASSWORD', 'root');
+define('DB_PORT', '8889');
 
 // 文字化け対策
 $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET 'utf8'");

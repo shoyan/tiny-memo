@@ -1,5 +1,6 @@
 <?php
-require('dateabase.php');
+ini_set('display_errors', "On");
+require('database.php');
 
 /**
  * メモを操作するクラス
