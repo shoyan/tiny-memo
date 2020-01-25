@@ -14,4 +14,4 @@ init.sqlを実行してテーブルを作成してください。
 ### htdocsに配置
 
 ファイルをhtdocs配下に配置して、次のURLにアクセスしてください。
-`http://localhost:8888/tiny_memo/`
+`http://localhost:8888/tiny-memo/`
