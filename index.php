@@ -152,9 +152,10 @@ if (isset($_POST["junction"])) {
   $row = $_POST["junction"];
 
   switch ($row) {
-    case "更新":
+
+    case "送信":
       if (empty($_POST['id'])) {
-        print 'idを入力してください!';
+        $memo = Memo::create($_POST['title'], $_POST['message']);
       } else {
         $memo = Memo::findById($_POST['id']);
         $memo->setTitle($_POST['title']);
@@ -162,10 +163,6 @@ if (isset($_POST["junction"])) {
         $memo->update();
       }
       break;
-
-    case "送信":
-      $memo = Memo::create($_POST['title'], $_POST['message']);
-     break;
 
     case "削除":
       $memo = Memo::findById($_POST['id']);
@@ -222,7 +219,6 @@ if ($memo) {
       <div><textarea id='message' name='message' class='message'><?PHP print $message ?></textarea></div>
       <div class="bottun">
         <input type='submit' name='junction' value='送信'>
-        <input type="submit" name="junction" value="更新">
         <input class="red" type="submit" name="junction" value="削除"><br />
       </div>
       <br />
