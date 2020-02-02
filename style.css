@@ -58,6 +58,8 @@ a {
     font-size:100%;
     vertical-align:baseline;
     background:transparent;
+    text-decoration: none;
+    color: #000;
 }
 
 /* change colours to suit your needs */
@@ -112,10 +114,11 @@ input[type=text], input[type=number] {
     margin-top: 5px;
     background-color: #fff;
     color:#495057;
-    width: 72%;
+    width: 97%;
     padding: 0.375rem 0.75rem;
     border:0;
     font: 400 13.3333px Arial;
+    margin-left: 10px;
   }
 
 input[name=id] { 
@@ -183,9 +186,9 @@ input[type=submit].red {
     float: left;
     background-color: #FFF;
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
     text-align: left;
+    overflow:auto
 }
 
 .main {
@@ -216,6 +219,9 @@ input[name=back] {
 
 input[name=back] {
     margin-bottom: 20px;
+}
+.border {
+    border-bottom: solid 1px #f8f9fa;
 }
 
 

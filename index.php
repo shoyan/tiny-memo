@@ -109,8 +109,6 @@ class Memo
   public static function create($title, $message)
   {
     $stmt = self::$dbh->prepare("INSERT INTO memo (title,message) VALUES (?,?)");
-    $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-    $stmt->bindParam(':message', $message, PDO::PARAM_STR);
     $data[] = $title;
     $data[] = $message;
     $stmt->execute($data);
@@ -203,22 +201,23 @@ if ($memo) {
 <body>
   <form method='post' action='/tiny_memo/'>
     <div class="sidebar">
-      <p>メモ一覧<p>
+      <p><a href="/tiny_memo">メモ一覧</a><p>
       <br />
       <a href='/tiny_memo/'><input name='back' type='submit' value='新規作成'></a>
 
       <?PHP foreach (Memo::all() as $row) : ?>
-        <p class='dot'>id:</p>
-        <a href='/tiny_memo/?linkId=<?PHP print $row["id"] ?>'><input id='linkId' class='linkId' type='button' name='linkId' value='<?PHP print $row["id"] ?>'></a>
-        <br>
-        <p><?PHP print $row['title'] ?></p>
-        <p class="overflow-ellipsis"><?PHP print $row['message'] ?></p>
-        <br />
+        <a href='/tiny_memo/?linkId=<?PHP print $row["id"] ?>'>
+          <div class="border">
+            <p><?PHP print $row['title'] ?></p>
+            <p class="overflow-ellipsis"><?PHP print $row['message'] ?></p>
+            <br />
+          </div>
+        </a>
       <?PHP endforeach ?>
     </div>
 
     <div class="main">
-      <input id='id' type='text' name='id' class='id' value='<?PHP print $id ?>' placeholder="id">
+      <input type="hidden" id='id' type='text' name='id' class='id' value='<?PHP print $id ?>' placeholder="id">
       <input id='title' type='text' name='title' class='title' value='<?PHP print $title ?>' placeholder="件名">
       <div><textarea id='message' name='message' class='message'><?PHP print $message ?></textarea></div>
       <div class="bottun">
