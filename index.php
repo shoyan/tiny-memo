@@ -77,7 +77,7 @@ class Memo
    */
   public static function all()
   {
-    $sql = 'SELECT * FROM memo';
+    $sql = 'SELECT * FROM memo ORDER BY updatedAt DESC';
     $stmt = self::$dbh->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -178,11 +178,15 @@ if (isset($_POST["junction"])) {
 $id = '';
 $title = '';
 $message = '';
+$createdAt = '';
+$updatedAt = '';
 
 if ($memo) {
   $id = $memo->id();
   $title = $memo->title();
   $message = $memo->message();
+  $createdAt = $memo->createdAt();
+  $updatedAt = $memo->updatedAt();
 }
 
 ?>
@@ -207,6 +211,8 @@ if ($memo) {
           <div class="border">
             <p><?PHP print $row['title'] ?></p>
             <p class="overflow-ellipsis"><?PHP print $row['message'] ?></p>
+            <!--日付けをスラッシュ区切り-->
+            <p><?PHP echo date('Y/n/d',  strtotime($row['createdAt'])); ?></p>
             <br />
           </div>
         </a>
@@ -216,6 +222,7 @@ if ($memo) {
     <div class="main">
       <input type="hidden" id='id' type='text' name='id' class='id' value='<?PHP print $id ?>' placeholder="id">
       <input id='title' type='text' name='title' class='title' value='<?PHP print $title ?>' placeholder="件名">
+      <p>作成日：<?PHP print date('Y/n/d', strtotime($createdAt)); ?> 更新日：<?PHP print date('Y/n/d', strtotime($updatedAt)); ?></p>    
       <div><textarea id='message' name='message' class='message'><?PHP print $message ?></textarea></div>
       <div class="bottun">
         <input type='submit' name='junction' value='送信'>

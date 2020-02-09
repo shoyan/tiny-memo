@@ -194,6 +194,10 @@ input[type=submit].red {
 .main {
     float: left;
 }
+.main p {
+    margin-left: 20px;
+    font-size: 12px;
+}
 
 input[name=back] {
     margin-left: 20px;
@@ -222,6 +226,9 @@ input[name=back] {
 }
 .border {
     border-bottom: solid 1px #f8f9fa;
+}
+.border p {
+    font-size: 12px;
 }
 
 
