@@ -193,6 +193,7 @@ input[type=submit].red {
 
 .main {
     float: left;
+    width: 80%;
 }
 .main p {
     margin-left: 20px;
