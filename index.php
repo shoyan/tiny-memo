@@ -77,7 +77,7 @@ class Memo
    */
   public static function all()
   {
-    $sql = 'SELECT * FROM memo';
+    $sql = 'SELECT * FROM memo ORDER BY updatedAt DESC';
     $stmt = self::$dbh->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -109,8 +109,6 @@ class Memo
   public static function create($title, $message)
   {
     $stmt = self::$dbh->prepare("INSERT INTO memo (title,message) VALUES (?,?)");
-    $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-    $stmt->bindParam(':message', $message, PDO::PARAM_STR);
     $data[] = $title;
     $data[] = $message;
     $stmt->execute($data);
@@ -154,9 +152,10 @@ if (isset($_POST["junction"])) {
   $row = $_POST["junction"];
 
   switch ($row) {
-    case "更新":
+
+    case "送信":
       if (empty($_POST['id'])) {
-        print 'idを入力してください!';
+        $memo = Memo::create($_POST['title'], $_POST['message']);
       } else {
         $memo = Memo::findById($_POST['id']);
         $memo->setTitle($_POST['title']);
@@ -164,10 +163,6 @@ if (isset($_POST["junction"])) {
         $memo->update();
       }
       break;
-
-    case "送信":
-      $memo = Memo::create($_POST['title'], $_POST['message']);
-     break;
 
     case "削除":
       $memo = Memo::findById($_POST['id']);
@@ -183,11 +178,15 @@ if (isset($_POST["junction"])) {
 $id = '';
 $title = '';
 $message = '';
+$createdAt = '';
+$updatedAt = '';
 
 if ($memo) {
   $id = $memo->id();
   $title = $memo->title();
   $message = $memo->message();
+  $createdAt = $memo->createdAt();
+  $updatedAt = $memo->updatedAt();
 }
 
 ?>
@@ -203,27 +202,30 @@ if ($memo) {
 <body>
   <form method='post' action='/tiny_memo/'>
     <div class="sidebar">
-      <p>メモ一覧<p>
+      <p><a href="/tiny_memo">メモ一覧</a><p>
       <br />
       <a href='/tiny_memo/'><input name='back' type='submit' value='新規作成'></a>
 
       <?PHP foreach (Memo::all() as $row) : ?>
-        <p class='dot'>id:</p>
-        <a href='/tiny_memo/?linkId=<?PHP print $row["id"] ?>'><input id='linkId' class='linkId' type='button' name='linkId' value='<?PHP print $row["id"] ?>'></a>
-        <br>
-        <p><?PHP print $row['title'] ?></p>
-        <p class="overflow-ellipsis"><?PHP print $row['message'] ?></p>
-        <br />
+        <a href='/tiny_memo/?linkId=<?PHP print $row["id"] ?>'>
+          <div class="border">
+            <p><?PHP print $row['title'] ?></p>
+            <p class="overflow-ellipsis"><?PHP print $row['message'] ?></p>
+            <!--日付けをスラッシュ区切り-->
+            <p><?PHP echo date('Y/n/d',  strtotime($row['createdAt'])); ?></p>
+            <br />
+          </div>
+        </a>
       <?PHP endforeach ?>
     </div>
 
     <div class="main">
-      <input id='id' type='text' name='id' class='id' value='<?PHP print $id ?>' placeholder="id">
+      <input type="hidden" id='id' type='text' name='id' class='id' value='<?PHP print $id ?>' placeholder="id">
       <input id='title' type='text' name='title' class='title' value='<?PHP print $title ?>' placeholder="件名">
+      <p>作成日：<?PHP print date('Y/n/d', strtotime($createdAt)); ?> 更新日：<?PHP print date('Y/n/d', strtotime($updatedAt)); ?></p>    
       <div><textarea id='message' name='message' class='message'><?PHP print $message ?></textarea></div>
       <div class="bottun">
         <input type='submit' name='junction' value='送信'>
-        <input type="submit" name="junction" value="更新">
         <input class="red" type="submit" name="junction" value="削除"><br />
       </div>
       <br />
